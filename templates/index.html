@@ -1,0 +1,189 @@
+{{define "Title"}}首页{{end}}
+{{define "Breadcrumb"}}{{end}}
+{{define "ContentWidth"}}8{{end}}
+{{define "Content"}}
+
+<style>
+
+.item{
+	padding:10px;
+	border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color:#f0f0f0;
+	line-height: 2em;
+}
+
+.label-default{
+	background-color: #e5e5e5;
+	color: #999;
+	padding: 2px 4px;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	font-size: 12px;
+}
+
+.col-md-1{
+	height:60px
+}
+.badge{
+	margin-top:25px
+}
+
+</style>
+<div class="panel">
+
+	{{range .topics}}
+	{{$creater := .Creater $.db}}
+	{{$node := .Node $.db}}
+	
+	<div class="item row">
+		<div class="col-md-11">
+		<!--头像-->
+		<a href="/member/{{$creater.Username}}" class="pull-left" style="margin-right: 10px;">
+		<img class="img-rounded" src="{{$creater.AvatarImgSrc 60}}" alt="{{$creater.Username}}">
+		</a>
+		
+		<!--标题-->
+	  	<a href="/t/{{.Id_.Hex}}" class="title">{{truncate .Title 80 "..."}}{{if .IsTop}} <span class="glyphicon glyphicon-pushpin"></span>{{end}}</a>
+		
+		<h6>
+		<!--节点-->
+		<a class="label-default" href="/go/{{$node.Id}}">{{$node.Name}}</a> •
+		<!--用户名-->
+		<a href="/member/{{$creater.Username}}"><strong>{{$creater.Username}}</strong></a> •
+		<!--最后回复用户名-->
+		{{if .CommentCount}}
+		{{$latestReplier := .LatestReplier $.db}}
+		<time datetime="{{formatdatetime .LatestRepliedAt}}" title="{{formatdatetime .LatestRepliedAt}}">{{formattime .LatestRepliedAt}}</time> • 最后回复来自 <a href="/member/{{$latestReplier.Username}}">{{$latestReplier.Username}}</a>
+		{{else}}
+		<time datetime="{{formatdatetime .CreatedAt}}" title="{{formatdatetime .CreatedAt}}">{{formattime .CreatedAt}}</time>
+		{{end}}
+		</h6>
+		</div>
+		
+		<!--评论数-->
+		<center class="col-md-1">
+			{{if .CommentCount}}
+				<a class="badge" href="/t/{{.Id_.Hex}}#.LatestReplyId.Hex">{{.CommentCount}}</a>
+			{{end}}
+		</center>
+	</div>	
+{{end}}
+
+	<!--分页-->
+	{{.pagination.Html .page}}
+</div>
+
+	
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+	<h3 class="panel-title">节点导航</h3>
+  </div>
+  <div class="panel-body">
+	{{range .nodes}}
+	<a href="/go/{{.Id}}" class="btn">{{.Name}}</a>
+	{{end}}
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+	<h3 class="panel-title">热门城市</h3>
+  </div>
+  <div class="panel-body">
+	{{range .cities}}
+	<a href="/members/city/{{.Name}}" class="btn">{{.Name}}</a>
+	{{end}}
+  </div>
+</div>
+{{end}}
+
+{{define "LeftSide"}}{{end}}
+
+{{define "RightSide"}}
+<div class="col-md-4 sidebar">
+  <div class="panel panel-default">
+	<div class="panel-body">
+	  {{if .username}}
+	  {{.utils.UserInfo .username .db}}
+	  <!--
+	  {{.utils.News .username .db}}
+	  <hr>
+	  <a href="/member/{{.username}}/collect?p=1">收藏</a>-->
+	  {{else}}
+
+	  <h4><small>致力于打造一个国内Gophers交流和分享的地方</small></h4>
+	  <hr>
+	  <div align="center">
+		<a href="/signup" class="btn btn-info">注册</a><!-- 或
+															<a href="/auth/login" class="btn btn-info">Github登录</a>-->
+	  </div>
+	  <div class="cleanfix"></div>
+	  <div align="center">已注册用户：<a href="/signin">登录</a></div>
+	  {{end}}
+	</div>
+  </div>
+  <a href="/topic/new" class="btn btn-success btn-lg btn-block" style="margin-bottom: 20px;"><i class="glyphicon glyphicon-edit"></i> 发表话题</a>
+  {{$ads := ads "frontpage" .db}}
+  {{if $ads}}
+  <div class="panel panel-default" id="ads">
+	<div class="panel-body">
+	  {{range $ads}}
+	  {{html .Code}}
+	  {{end}}
+	</div>
+  </div>
+  {{end}}
+  <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title">友情社区</h3>
+	</div>
+	<ul class="list-group">
+	  {{range .linkExchanges}}
+	  <li class="list-group-item">
+		<a href="{{.URL}}" target="_blank" title="{{.Description}}">
+		  {{if .Logo}}
+		  <img src="{{.Logo}}" style="max-width: 224px;">
+		  {{else}}
+		  {{.Name}}
+		  {{end}}
+		</a>
+      </li>
+	  {{end}}
+	</ul>
+	<div class="panel-footer">
+	  <a href="/link" class="pull-right">更多</a>
+	  <div class="clearfix"></div>
+	</div>
+  </div>
+  <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title">社区状态</h3>
+	</div>
+	<table width="100%" class="status">
+	  <thead>
+		<tr>
+		  <th>&nbsp;</th>
+		  <th></th>
+		</tr>
+	  </thead>
+	  <tbody>
+		<tr>
+		  <td class="status-label">注册会员</td>
+		  <td class="value">{{.status.UserCount}}</td>
+		</tr>
+		<tr>
+		  <td class="status-label">主题</td>
+		  <td class="value">{{.status.TopicCount}}</td>
+		</tr>
+		<tr>
+		  <td class="status-label">回复</td>
+		  <td class="value">{{.status.ReplyCount}}</td>
+		</tr>
+	  </tbody>
+	</table>
+  </div>
+</div>
+{{end}}

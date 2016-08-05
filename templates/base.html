@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="keywords" content="Golang, Go语言, Golang 中国, Golang社区, golang.tc" />
+	<meta name="description" content="Golang中国社区，致力于打造国内Gopher交流的地方，提供社区，文章，酷站，第三方包，下载功能">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta property="wb:webmaster" content="7e9b420372e9d83e" />
+	<meta property="qc:admins" content="44113752776774167436375" />
+	<title>{{template "Title" .}} - GOROUTINE</title>
+	<script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.0.3/jquery.min.js"></script>
+	<link rel="stylesheet" href="http://7xk58a.com1.z0.glb.clouddn.com/bootstrap-3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://7xk58a.com1.z0.glb.clouddn.com/font-awesome-4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="http://77fkk5.com1.z0.glb.clouddn.com/static/lib/editor.md-1.5.0/css/editormd.min.css">
+	<link rel="stylesheet" href="/static/css/style.css?v=20" type="text/css">
+
+
+	<link rel="stylesheet" href="/static/css/lmw.css" type="text/css">
+
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+	<a class="navbar-brand" href="/">
+     GOROUTINE
+    </a>
+
+	<ul class="nav navbar-nav navbar-right">
+		<li><a href="/">Home</a></li>
+		
+		{{if .username}}
+		
+		<li><a href="/user_center">{{.username}}</a></li>
+		
+		<!--
+		<li><a href="/member/{{.username}}/collect">Favorites</a></li>
+		<li><a href="/user_center/change_password">Repwd</a></li>
+		-->
+		
+		{{if .isSuperUser}}
+		<li><a href="/admin">Admin</a></li>
+		{{end}}
+		
+		<li><a href="/signout">Signout</a></li>
+		{{else}}
+		
+		<li><a href="/signin">Signin</a></li>
+		<li><a href="/signup">Signup</a></li>
+		
+		{{end}}
+	</ul>
+  </div>
+</nav>
+
+	<style>
+.maincontent{
+	min-height:700px
+}	
+	</style>
+	
+	<div class="container maincontent">
+		<div class="row">
+			{{template "LeftSide" .}}
+            <div class="col-md-{{template "ContentWidth"}}">
+			<div class="panel panel-default nodes-panel">
+			<ul class="nav nav-pills nodes" >
+			<li{{if eq .active "topic"}} class="active"{{end}} role="presentation"><a href="/">全部</a></li>
+			<li{{if eq .active "article"}} class="active"{{end}}><a href="/articles">文章</a></li>
+			<li{{if eq .active "site"}} class="active"{{end}}><a href="#">问答</a></li>
+			<li{{if eq .active "site"}} class="active"{{end}}><a href="#">招聘</a></li>
+			</ul>
+			</div>
+			{{template "Breadcrumb" .}}
+			{{template "Content" .}}
+			</div>
+			{{template "RightSide" .}}
+		</div>
+	</div>
+	<footer class="footer" >
+		<div class="container">
+			<p>
+				<ul class="footer-links">
+					<li><a href="/about">关于</a>
+					<li class="muted">&middot;</li>
+					<li><a href="/faq">FAQ</a></li>
+					<li class="muted">&middot;</li>
+					<li><a href="/link">友链</a></li>
+					<li class="muted">&middot;</li>
+					<li><a href="/go/feedback">反馈</a></li>
+					<li class="muted">&middot;</li>
+					<li><a href="https://github.com/jimmykuu/gopher" target="_blank">GitHub</a></li>
+				</ul>
+			</p>
+			<p>&copy;2012-2016 golangtc.com</p>
+			<p>Website built by <a href="https://github.com/jimmykuu/gopher" target="_blank" rel="nofollow">Gopher</a>, powered by <a href="http://golang.org/" target="_blank" rel="nofollow">Golang</a>, <a href="http://www.mongodb.org/" target="_blank" rel="nofollow">MongoDB</a>.</p>
+			<p>
+			  Build version {{.goVersion}}.
+			  Based on <a target="_blank" href="http://getbootstrap.com/" rel="nofollow">Bootstrap</a>.
+			  Icons from <a target="_blank" href="http://glyphicons.com/" rel="nofollow">Glyphicons</a>.
+			  {{loadtimes .startTime}}.
+			</p>
+			
+			 
+			  {{range .linksOnBottom}}
+			  <a href="{{.URL}}" target="_blank"><img src="{{.Logo}}" alt="{{.Name}}"></a>
+			  {{end}}
+			</p>
+		</div>
+	</footer>
+	{{.analyticsCode}}
+</body>
+<script type="text/javascript" src="http://7xk58a.com1.z0.glb.clouddn.com/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://77fkk5.com1.z0.glb.clouddn.com/static/lib/editor.md-1.5.0/editormd.min.js"></script>
+<script type="text/javascript" src="http://7xk58a.com1.z0.glb.clouddn.com/google-code-prettify/prettify.js"></script>
+<script type="text/javascript" src="http://7xk58a.com1.z0.glb.clouddn.com/pace-1.0.2/pace.min.js"></script>
+<script type="text/javascript" src="/static/js/application.js?v=26"></script>
+</html>
